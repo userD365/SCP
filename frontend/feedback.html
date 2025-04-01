@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Submit Feedback</title>
+  <style>
+    body {
+      background-color: #a8df65;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .feedback-box {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 320px;
+      text-align: center;
+    }
+    textarea, input {
+      width: 100%;
+      padding: 8px;
+      margin: 10px 0;
+    }
+    input[type="submit"] {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    input[type="submit"]:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <div class="feedback-box">
+    <h2>Submit Feedback</h2>
+    <form method="post" action="/feedback/">
+      <input type="hidden" name="csrf_token" value="fake-token">
+      <label>Student ID:</label><br>
+      <input type="text" name="student_id" required><br>
+      <label>Your Feedback:</label><br>
+      <textarea name="feedback_text" rows="4" required></textarea><br>
+      <input type="submit" value="Submit">
+    </form>
+  </div>
+</body>
+</html>

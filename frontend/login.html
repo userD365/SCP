@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login & Register</title>
+  <style>
+    body {
+      background-color: #a8df65;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .form-container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 320px;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin: 6px 0;
+    }
+    input[type="submit"] {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+    .toggle-btn {
+      margin-top: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      color: #007bff;
+      background: none;
+      border: none;
+    }
+    .toggle-btn:hover {
+      text-decoration: underline;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2 id="form-title">Login</h2>
+
+    <!-- Login Form -->
+    <form id="login-form" method="post" action="/auth/login">
+      <input type="text" name="student_id" placeholder="Student ID" required><br>
+      <input type="password" name="password" placeholder="Password" required><br>
+      <input type="submit" value="Login">
+    </form>
+
+    <!-- Register Form -->
+    <form id="register-form" class="hidden" method="post" action="/auth/register">
+      <input type="text" name="name" placeholder="Name" required><br>
+      <input type="text" name="student_id" placeholder="Student ID" required><br>
+      <input type="password" name="password" placeholder="Password" required><br>
+      <input type="submit" value="Register">
+    </form>
+
+    <button class="toggle-btn" onclick="toggleForms()">New user? Register here</button>
+  </div>
+
+  <script>
+    function toggleForms() {
+      const loginForm = document.getElementById("login-form");
+      const registerForm = document.getElementById("register-form");
+      const title = document.getElementById("form-title");
+      const toggleBtn = document.querySelector(".toggle-btn");
+
+      const isLogin = !loginForm.classList.contains("hidden");
+
+      loginForm.classList.toggle("hidden", isLogin);
+      registerForm.classList.toggle("hidden", !isLogin);
+      title.textContent = isLogin ? "Register" : "Login";
+      toggleBtn.textContent = isLogin ? "Already have an account? Login" : "New user? Register here";
+    }
+  </script>
+</body>
+</html>
