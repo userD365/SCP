@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Feedback View</title>
+  <style>
+    body {
+      background-color: #a8df65;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .feedback-container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 480px;
+      text-align: center;
+    }
+
+    .feedback-item {
+      background-color: #f1f1f1;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+    }
+
+    .action-links a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #007bff;
+    }
+
+    .action-links a:hover {
+      text-decoration: underline;
+    }
+
+    .back-btn {
+      margin-top: 20px;
+      padding: 8px 18px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .back-btn:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <div class="feedback-container">
+    <h2>Feedbacks for Student ID: {{ student_id }}</h2>
+
+    {% if feedbacks %}
+      {% for item in feedbacks %}
+        <div class="feedback-item">
+          {{ item.feedback_text }}
+          <div class="action-links">
+            <a href="/feedback/edit/{{ item.id }}">Edit</a>
+            <a href="/feedback/delete/{{ item.id }}">Delete</a>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>No feedback submitted yet.</p>
+      <a href="/feedback?student_id={{ student_id }}" class="back-btn">Back</a>
+    {% endif %}
+  </div>
+</body>
+</html>

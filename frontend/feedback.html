@@ -12,27 +12,42 @@
       height: 100vh;
       margin: 0;
     }
+
     .feedback-box {
       background-color: white;
       padding: 30px;
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      width: 320px;
+      width: 360px;
       text-align: center;
     }
+
     textarea, input {
       width: 100%;
       padding: 8px;
       margin: 10px 0;
     }
-    input[type="submit"] {
+
+    input[type="submit"],
+    .back-btn {
       background-color: #28a745;
       color: white;
       border: none;
       cursor: pointer;
+      border-radius: 5px;
+      padding: 10px 20px;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 10px;
     }
-    input[type="submit"]:hover {
+
+    input[type="submit"]:hover,
+    .back-btn:hover {
       background-color: #218838;
+    }
+
+    input[readonly] {
+      background-color: #e9ecef;
     }
   </style>
 </head>
@@ -40,13 +55,17 @@
   <div class="feedback-box">
     <h2>Submit Feedback</h2>
     <form method="post" action="/feedback/">
-      <input type="hidden" name="csrf_token" value="fake-token">
       <label>Student ID:</label><br>
-      <input type="text" name="student_id" required><br>
+      <input type="text" name="student_id" value="{{ student_id }}" readonly><br>
+
       <label>Your Feedback:</label><br>
       <textarea name="feedback_text" rows="4" required></textarea><br>
+
       <input type="submit" value="Submit">
     </form>
+
+    <!-- 🔙 Back to Results Button -->
+    <a href="/results?student_id={{ student_id }}" class="back-btn">Back to Results</a>
   </div>
 </body>
 </html>

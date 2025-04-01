@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Feedback</title>
+  <style>
+    body {
+      background-color: #a8df65;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .edit-box {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 360px;
+      text-align: center;
+    }
+    textarea, input {
+      width: 100%;
+      padding: 8px;
+      margin: 10px 0;
+    }
+    input[type="submit"] {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="edit-box">
+    <h2>Edit Feedback</h2>
+    <form method="post" action="/feedback/edit/{{ feedback.id }}">
+      <label>Student ID:</label><br>
+      <input type="text" name="student_id" value="{{ feedback.student_id }}" readonly><br>
+
+      <label>Your Feedback:</label><br>
+      <textarea name="feedback_text" rows="4" required>{{ feedback.feedback_text }}</textarea><br>
+
+      <input type="submit" value="Update">
+    </form>
+  </div>
+</body>
+</html>

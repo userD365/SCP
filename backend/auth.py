@@ -1,45 +1,40 @@
-from fastapi import APIRouter, Request, Form, Depends
+from fastapi import APIRouter, Form, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.templating import Jinja2Templates
+from passlib.context import CryptContext  # For password hashing
 from sqlalchemy.orm import Session
 from backend.database import get_db
-from backend import models
+from backend.crud import authenticate_student
+
+# Initialize password hashing context
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 router = APIRouter()
-templates = Jinja2Templates(directory="frontend")
 
-# Unified login/register page (GET)
+# Verify password using bcrypt hashing
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)
+
+# GET route to show login form
 @router.get("/login", response_class=HTMLResponse)
-@router.get("/register", response_class=HTMLResponse)
-def show_login_register_form(request: Request):
-    return templates.TemplateResponse("login_register.html", {"request": request})
+def show_login_form(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
 
-# Registration handler (POST)
-@router.post("/register")
-def register_user(
-    name: str = Form(...),
+# POST route to handle login logic
+@router.post("/login")
+def login_user(
     student_id: str = Form(...),
     password: str = Form(...),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    request: Request = None  # Optional for handling flash messages or session
 ):
-    # Check for duplicate student_id
-    existing_student = db.query(models.Student).filter_by(student_id=student_id).first()
-    if existing_student:
-        return HTMLResponse(
-            content=f"<h3>Student ID '{student_id}' already exists. Try logging in.</h3>",
-            status_code=400
-        )
+    student = authenticate_student(db, student_id)  # Get student by ID
 
-    # Create new student record
-    new_student = models.Student(
-        name=name.strip(),
-        student_id=student_id.strip(),
-        password=password
-    )
+    if not student:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
 
-    db.add(new_student)
-    db.commit()
-    db.refresh(new_student)
+    # Verify if the provided password matches the hashed password stored in the DB
+    if not verify_password(password, student.password):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
 
-    # Redirect back to login form
-    return RedirectResponse(url="/auth/login", status_code=303)
+    # If authentication is successful, redirect to the results page
+    return RedirectResponse(url=f"/results?student_id={student_id}", status_code=303)

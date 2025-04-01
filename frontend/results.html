@@ -1,8 +1,98 @@
 <!DOCTYPE html>
 <html>
-<head><title>Exam Results</title></head>
+<head>
+  <title>Student Results</title>
+  <style>
+    body {
+      background-color: #a8df65;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      margin-top: 60px;
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 500px;
+      text-align: center;
+      position: relative;
+    }
+
+    .logout-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #dc3545;
+      color: white;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .logout-btn:hover {
+      background-color: #c82333;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 40px;
+    }
+
+    .result-grid div {
+      padding: 10px;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      text-align: left;
+    }
+
+    .feedback-btn {
+      margin-top: 30px;
+      padding: 10px 25px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .feedback-btn:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
 <body>
-  <h2>Your Results</h2>
-  <div id="results"></div>
+  <div class="container">
+    <!-- Logout Button -->
+    <form method="get" action="/auth/login">
+      <button type="submit" class="logout-btn">Logout</button>
+    </form>
+
+    <!-- Welcome Text -->
+    <h2>Welcome, Student ID: {{ student_id }}</h2>
+
+    <!-- Results Grid -->
+    <div class="result-grid">
+      <div><strong>Math:</strong> {{ results.math }}</div>
+      <div><strong>Science:</strong> {{ results.science }}</div>
+      <div><strong>English:</strong> {{ results.english }}</div>
+      <div><strong>History:</strong> {{ results.history }}</div>
+    </div>
+
+    <!-- Feedback Button -->
+    <form method="get" action="/feedback">
+      <input type="hidden" name="student_id" value="{{ student_id }}">
+      <button type="submit" class="feedback-btn">Give Feedback</button>
+    </form>
+  </div>
 </body>
 </html>

@@ -4,26 +4,27 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 import uvicorn
 
+# Import route modules
 from backend.routes import auth_routes, result_routes, feedback_routes
 
 app = FastAPI()
 
-# Mount static files (CSS, JS)
+# Mount static directory (for CSS/JS/images if needed)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Jinja2 template setup
+# Jinja2 templates directory
 templates = Jinja2Templates(directory="frontend")
 
-# Include route modules
+# Register routers
 app.include_router(auth_routes.router, prefix="/auth")
 app.include_router(result_routes.router, prefix="/results")
 app.include_router(feedback_routes.router, prefix="/feedback")
 
-# Homepage renders login
+# Serve login page at /
 @app.get("/", response_class=HTMLResponse)
 def read_root(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
-# Run app using: python backend/main.py
+# Run with: python backend/main.py
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("backend.main:app", host="127.0.0.1", port=8000, reload=True)
