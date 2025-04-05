@@ -45,9 +45,6 @@ jobs:
     #step 7:
     - name: Deploy to EC2 via Elastic Beanstalk
       run: |
-           echo "$SSH_PRIVATE_KEY" > key.pem
-           chmod 600 key.pem
-   
            ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@ec2-3-86-215-132.compute-1.amazonaws.com << 'EOF'
              cd ~/exam_feedback_app
              git reset --hard
