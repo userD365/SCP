@@ -27,8 +27,10 @@ jobs:
         pip install -r requirements.txt
 
     #  Step 4: Run tests (optional)
-    - name: Run tests using pytest
+    - name: Test FastAPI startup
       run: |
-        pip install pytest
-        pytest
+        uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload &
+        sleep 10
+        curl -I http://127.0.0.1:8000 || exit 1
+
 
