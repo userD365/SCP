@@ -27,9 +27,8 @@ jobs:
         pip install -r requirements.txt
 
     #  Step 4: Run tests (optional)
-    - name: Run tests
+    - name: Run tests using pytest
       run: |
-        echo "✅ Running tests..."
-        # Uncomment and customize if you have tests
-        python backend/main.py test
+        pip install pytest
+        pytest
 
