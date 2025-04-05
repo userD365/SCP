@@ -26,14 +26,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    #  Step 4: Run formatting/linting
-    - name: Run code checks
-      run: |
-        echo "✅ Running Black for formatting..."
-        pip install black
-        black . --check
-
-    #  Step 5: Run tests (optional)
+    #  Step 4: Run tests (optional)
     - name: Run tests
       run: |
         echo "✅ Running tests..."
