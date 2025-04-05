@@ -43,20 +43,18 @@ jobs:
       run:
             ls -l key.pem
     #step 7:
-    - name: SSH into EC2 and Deploy
+    - name: Deploy to EC2 via Elastic Beanstalk
       run: |
-         ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@ec2-3-86-215-132.compute-1.amazonaws.com << 'EOF'
-           cd ~/exam_feedback_app
-           git reset --hard HEAD
-           git pull https://github.com/userD365/SCP.git main
-           source venv/bin/activate
-           pip install -r requirements.txt
-           # Optional: Restart your Gunicorn or Uvicorn process
-           # pkill gunicorn || true
-           # nohup gunicorn backend.main:app --bind 0.0.0.0:8000 --daemon
-           echo "✅ Deployment completed"
-         EOF
-      
+           echo "$SSH_PRIVATE_KEY" > key.pem
+           chmod 600 key.pem
+   
+           ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@ec2-3-86-215-132.compute-1.amazonaws.com << 'EOF'
+             cd ~/exam_feedback_app
+             git reset --hard
+             git pull https://github.com/userD365/SCP.git main
+             source venv/bin/activate
+             eb deploy
+           EOF
 
 
 
