@@ -42,6 +42,11 @@ jobs:
     - name: Verify Key File
       run:
             ls -l key.pem
+    #step 7:
+    - name: SSH into EC2
+      run: |
+       ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@ec2-3-86-215-132.compute-1.amazonaws.com
+       shell: bash
 
 
 
