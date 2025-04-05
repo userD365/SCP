@@ -33,4 +33,15 @@ jobs:
         sleep 10
         curl -I http://127.0.0.1:8000 || exit 1
 
+    # Step 5: Creating PEM & verify
+    - name: Create SSH key file
+      run: |
+        echo "${{ secrets.EC2_PRIVATE_KEY }}" > key.pem
+        chmod 600 key.pem
+
+    - name: Verify Key File
+      run:
+            ls -l key.pem
+
+
 
