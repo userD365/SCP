@@ -42,7 +42,7 @@ jobs:
     - name: Verify Key File
       run:
             ls -l key.pem
-    #step 7:
+    #step 7 Deploy:
     - name: Deploy to EC2 via Elastic Beanstalk
       run: |
            ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@ec2-3-86-215-132.compute-1.amazonaws.com << 'EOF'
