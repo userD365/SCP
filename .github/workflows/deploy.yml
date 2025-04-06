@@ -45,7 +45,7 @@ jobs:
     #step 7 Deploy:
     - name: Deploy to EC2 via Elastic Beanstalk
       run: |
-           ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@ec2-3-86-215-132.compute-1.amazonaws.com << 'EOF'
+           ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@ec2-35-171-26-172.compute-1.amazonaws.com << 'EOF'
              cd ~/exam_feedback_app
              git reset --hard
              git pull https://github.com/userD365/SCP.git main
