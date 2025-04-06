@@ -43,17 +43,26 @@ jobs:
       run:
             ls -l key.pem
     #step 7 Deploy:
-    - name: Deploy to EC2 via Elastic Beanstalk
+    - name: SSH and Deploy via EB CLI
       run: |
-           ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@ec2-35-171-26-172.compute-1.amazonaws.com << 'EOF'
-             cd ~/exam_feedback_app
-             git init
-             git remote add origin https://github.com/userD365/SCP.git
-             git fetch
-             git reset --hard origin/main
-             source venv/bin/activate
-             eb deploy
-           EOF
+        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@ec2-35-171-26-172.compute-1.amazonaws.com << 'EOF'
+          cd ~/exam_feedback_app
+
+         # Pull latest code from GitHub
+          if [ ! -d ".git" ]; then
+            git init
+            git remote add origin https://github.com/userD365/SCP.git
+            git fetch origin main
+            git checkout -t origin/main
+          else
+            git reset --hard
+            git pull origin main
+          fi
+          source venv/bin/activate
+          eb use examfeedbackscp
+          eb deploy
+        EOF
+   
 
 
 
