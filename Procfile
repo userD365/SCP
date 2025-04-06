@@ -1,1 +1,1 @@
-web: uvicorn backend.main:app --host=0.0.0.0 --port=8000
+web: gunicorn backend.main:app --workers 4 --threads 2 --bind 0.0.0.0:8000
