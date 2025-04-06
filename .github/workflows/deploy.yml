@@ -47,8 +47,10 @@ jobs:
       run: |
            ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@ec2-35-171-26-172.compute-1.amazonaws.com << 'EOF'
              cd ~/exam_feedback_app
-             git reset --hard
-             git pull https://github.com/userD365/SCP.git main
+             git init
+             git remote add origin https://github.com/userD365/SCP.git
+             git fetch
+             git reset --hard origin/main
              source venv/bin/activate
              eb deploy
            EOF
