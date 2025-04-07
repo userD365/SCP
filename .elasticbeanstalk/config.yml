@@ -3,11 +3,12 @@ branch-defaults:
     environment: examfeedbackscp
     group_suffix: null
   main:
-    environment: examfeedbackscp
+    environment: examfeedback-env
+    group_suffix: null
   master:
     environment: examfeedbackscp
 global:
-  application_name: exam_feedback_app
+  application_name: examfeedback-app
   branch: null
   default_ec2_keyname: null
   default_platform: Python 3.13
@@ -18,5 +19,5 @@ global:
   platform_version: null
   profile: null
   repository: null
-  sc: null
+  sc: git
   workspace_type: Application
