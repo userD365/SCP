@@ -2,6 +2,8 @@ from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi import APIRouter
+import httpx
 import uvicorn
 
 # Import route modules
@@ -24,6 +26,22 @@ app.include_router(feedback_routes.router, prefix="/feedback")
 @app.get("/", response_class=HTMLResponse)
 def read_root(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
+
+
+# 🆕 Fetch external results from friend's API
+@app.get("/external-results/{student_id}", response_class=HTMLResponse)
+async def get_external_results(student_id: str, request: Request):
+    api_url = f"http://scp-exam-app-env.eba-3hfvxmq4.us-east-1.elasticbeanstalk.com/api/results/{student_id}/"
+    
+    async with httpx.AsyncClient() as client:
+        response = await client.get(api_url)
+
+    if response.status_code == 200:
+        result_data = response.json()
+        return templates.TemplateResponse("results.html", {"request": request, "results": result_data})
+    else:
+        return templates.TemplateResponse("results.html", {"request": request, "results": None, "error": "Failed to fetch results."})
+
 
 # Run with: python backend/main.py
 if __name__ == "__main__":
