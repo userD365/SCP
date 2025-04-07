@@ -45,7 +45,7 @@ jobs:
     #step 7 Deploy:
     - name: SSH and Deploy via EB CLI
       run: |
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@ec2-35-171-26-172.compute-1.amazonaws.com << 'EOF'
+        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@ec2-54-208-49-229.compute-1.amazonaws.com << 'EOF'
           cd ~/exam_feedback_app
 
          # Pull latest code from GitHub
