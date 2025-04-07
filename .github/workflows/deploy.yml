@@ -59,7 +59,7 @@ jobs:
             git pull origin main
           fi
           source venv/bin/activate
-          eb use examfeedbackscp
+          eb use examfeedback-env
           eb deploy
         EOF
    
