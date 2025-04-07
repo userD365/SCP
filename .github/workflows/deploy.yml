@@ -1,68 +1,48 @@
-name: CI/CD Pipeline - Build and Deploy to EC2
+name: CI/CD Pipeline - Deploy to AWS Elastic Beanstalk
 
 on:
   push:
     branches:
-      - main  # Change if you use another branch
+      - main
 
 jobs:
-  build-and-deploy:
+  deploy-to-ebs:
     runs-on: ubuntu-latest
 
     steps:
-    #  Step 1: Checkout source code
+    # Step 1: Checkout source code
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    #  Step 2: Set up Python (if needed)
+    # Step 2: Set up Python
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: 3.9
 
-    #  Step 3: Install dependencies
+    # Step 3: Install dependencies
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    #  Step 4: Run tests (optional)
-    - name: Test FastAPI startup
+    # Step 4: Configure AWS credentials (including session token)
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+        aws-region: us-east-1  # Update if your EBS is in a different region
+
+    # Step 5: Install EB CLI
+    - name: Install Elastic Beanstalk CLI
       run: |
-        uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload &
-        sleep 10
-        curl -I http://127.0.0.1:8000 || exit 1
+        pip install awsebcli
 
-    # Step 5: Creating PEM & verify
-    - name: Create SSH key file
+    # Step 6: Deploy to Elastic Beanstalk
+    - name: Deploy using EB CLI
       run: |
-        echo "${{ secrets.EC2_PRIVATE_KEY }}" > key.pem
-        chmod 600 key.pem
-
-    - name: Verify Key File
-      run:
-            ls -l key.pem
-    #step 7 Deploy:
-    - name: SSH and Deploy via EB CLI
-      run: |
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@ec2-54-208-49-229.compute-1.amazonaws.com << 'EOF'
-          cd ~/exam_feedback_app
-
-         # Pull latest code from GitHub
-          if [ ! -d ".git" ]; then
-            git init
-            git remote add origin https://github.com/userD365/SCP.git
-            git fetch origin main
-            git checkout -t origin/main
-          else
-            git reset --hard
-            git pull origin main
-          fi
-          source venv/bin/activate
-          eb use examfeedback-env
-          eb deploy
-        EOF
-   
-
-
-
+        eb init examfeedback-app --platform "Python 3.9 running on 64bit Amazon Linux 2" --region us-east-1
+        eb use examfeedback-env
+        eb deploy
