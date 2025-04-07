@@ -15,6 +15,5 @@ feedbacks = db.query(models.Feedback).all()
 for fb in feedbacks:
     print(fb.student_id, fb.feedback_text)
 
-
 # Step 4: Close DB session
 db.close()
