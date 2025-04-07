@@ -33,7 +33,7 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-        aws-region: us-east-1  # ✅ fixed here
+        aws-region: us-east-1
 
     # Step 5: Deploy to Elastic Beanstalk
     - name: Deploy to Elastic Beanstalk
