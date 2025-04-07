@@ -27,7 +27,7 @@ starlette
 typing-inspection
 typing_extensions
 urllib3
-uvicorn
+uvicorn[standard]
 uvloop
 watchfiles
 websockets
