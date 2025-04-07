@@ -1,4 +1,4 @@
-name: CI/CD Pipeline - Deploy to AWS Elastic Beanstalk
+name: CI/CD Pipeline - Build and Deploy to Elastic Beanstalk
 
 on:
   push:
@@ -18,31 +18,26 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: 3.13
+        python-version: 3.9
 
     # Step 3: Install dependencies
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install awsebcli
 
-    # Step 4: Configure AWS credentials (including session token)
+    # Step 4: Configure AWS credentials
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-        aws-region: us-east-1  # Update if your EBS is in a different region
+        region: us-east-1
 
-    # Step 5: Install EB CLI
-    - name: Install Elastic Beanstalk CLI
+    # Step 5: Deploy to Elastic Beanstalk
+    - name: Deploy to Elastic Beanstalk
       run: |
-        pip install awsebcli
-
-    # Step 6: Deploy to Elastic Beanstalk
-    - name: Deploy using EB CLI
-      run: |
-        eb init examfeedback-app --platform "Python 3.13 running on 64bit Amazon Linux 2" --region us-east-1
+        eb init examfeedback-app --platform "Python 3.13 running on 64bit Amazon Linux 2023 v4.5.0" --region us-east-1
         eb use examfeedback-env
         eb deploy
