@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request, Form, Depends, HTTPException
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from backend.database import get_db
@@ -28,7 +28,7 @@ def submit_feedback(
     db.commit()
     return RedirectResponse(url=f"/feedback/view?student_id={student_id}", status_code=303)
 
-# ✅ GET: View feedbacks for a student
+# ✅ GET: View feedbacks for a student (HTML view)
 @router.get("/view", response_class=HTMLResponse)
 def view_feedbacks(request: Request, student_id: str, db: Session = Depends(get_db)):
     feedbacks = db.query(models.Feedback).filter(models.Feedback.student_id == student_id).all()
@@ -37,6 +37,20 @@ def view_feedbacks(request: Request, student_id: str, db: Session = Depends(get_
         "student_id": student_id,
         "feedbacks": feedbacks
     })
+
+# ✅ GET: View feedbacks via JSON API for external app
+@router.get("/api/view")
+def view_feedbacks_api(student_id: str, db: Session = Depends(get_db)):
+    feedbacks = db.query(models.Feedback).filter(models.Feedback.student_id == student_id).all()
+    result = [
+        {
+            "id": fb.id,
+            "student_id": fb.student_id,
+            "feedback_text": fb.feedback_text
+        }
+        for fb in feedbacks
+    ]
+    return JSONResponse(content=result)
 
 # ✅ GET: Edit feedback form
 @router.get("/edit/{feedback_id}", response_class=HTMLResponse)
