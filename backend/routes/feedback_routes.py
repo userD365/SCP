@@ -38,10 +38,13 @@ def view_feedbacks(request: Request, student_id: str, db: Session = Depends(get_
         "feedbacks": feedbacks
     })
 
-# ✅ GET: View feedbacks via JSON API for external app
-@router.get("/api/view")
+# ✅ GET: View feedbacks via JSON API (external use)
+@router.get("/api/view", response_class=JSONResponse)
 def view_feedbacks_api(student_id: str, db: Session = Depends(get_db)):
     feedbacks = db.query(models.Feedback).filter(models.Feedback.student_id == student_id).all()
+    if not feedbacks:
+        return JSONResponse(content={"message": "No feedbacks found"}, status_code=404)
+
     result = [
         {
             "id": fb.id,
