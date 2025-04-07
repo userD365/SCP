@@ -31,3 +31,4 @@ uvicorn[standard]
 uvloop
 watchfiles
 websockets
+requests==2.32.3
