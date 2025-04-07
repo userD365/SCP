@@ -38,6 +38,6 @@ jobs:
     # Step 5: Deploy to Elastic Beanstalk
     - name: Deploy to Elastic Beanstalk
       run: |
-        eb init examfeedback-app --platform "Python 3.13 running on 64bit Amazon Linux 2023 v4.5.0" --region us-east-1
+        eb init examfeedback-app --platform "Python 3.13" --region us-east-1
         eb use examfeedback-env
         eb deploy
