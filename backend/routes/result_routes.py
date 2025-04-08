@@ -10,7 +10,7 @@ templates = Jinja2Templates(directory="frontend")
 EXTERNAL_API_URL = "http://scp-exam-app-env.eba-3hfvxmq4.us-east-1.elasticbeanstalk.com/api/results"
 TOKEN_URL = "http://scp-exam-app-env.eba-3hfvxmq4.us-east-1.elasticbeanstalk.com/api/token/"
 
-# Use env vars or define directly for testing (make sure to secure in production)
+# Use env vars or defaults for dev/testing
 USERNAME = os.getenv("API_USERNAME", "admin1")
 PASSWORD = os.getenv("API_PASSWORD", "123456")
 
@@ -27,13 +27,16 @@ async def get_jwt_token():
 async def get_results(student_id: str, request: Request):
     try:
         token = await get_jwt_token()
-
         headers = {"Authorization": f"Bearer {token}"}
 
         async with httpx.AsyncClient() as client:
             response = await client.get(f"{EXTERNAL_API_URL}/{student_id}/", headers=headers)
             response.raise_for_status()
-            results = response.json()
+            data = response.json()
+
+        # Parse and structure results
+        student_name = data.get("student_name", "Unknown")
+        subjects = data.get("subjects", [])
 
     except httpx.HTTPStatusError as e:
         raise HTTPException(status_code=e.response.status_code, detail="Student results not found")
@@ -43,5 +46,6 @@ async def get_results(student_id: str, request: Request):
     return templates.TemplateResponse("results.html", {
         "request": request,
         "student_id": student_id,
-        "results": results
+        "student_name": student_name,
+        "results": subjects
     })
