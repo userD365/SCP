@@ -107,3 +107,22 @@ def delete_feedback(feedback_id: int, db: Session = Depends(get_db)):
     db.delete(feedback)
     db.commit()
     return RedirectResponse(url=f"/feedback/view?student_id={student_id}", status_code=303)
+
+# ✅ GET: View all feedbacks (for external use)
+@router.get("/api/view_all", response_class=JSONResponse)
+def view_all_feedbacks(db: Session = Depends(get_db)):
+    feedbacks = db.query(models.Feedback).all()
+    
+    if not feedbacks:
+        return JSONResponse(content={"message": "No feedbacks found"}, status_code=404)
+
+    result = [
+        {
+            "id": fb.id,
+            "student_id": fb.student_id,
+            "feedback_text": fb.feedback_text
+        }
+        for fb in feedbacks
+    ]
+    return JSONResponse(content=result)
+
