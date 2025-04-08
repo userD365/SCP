@@ -56,7 +56,7 @@
     <h2>Submit Feedback</h2>
     <form method="post" action="/feedback/">
       <label>Student ID:</label><br>
-      <input type="text" name="student_id" value="{{ student_id }}" readonly><br>
+      <input type="text" name="student_id" value="{{ student_id }}" readonly required><br>
 
       <label>Your Feedback:</label><br>
       <textarea name="feedback_text" rows="4" required></textarea><br>
