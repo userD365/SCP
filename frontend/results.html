@@ -58,17 +58,28 @@
     }
 
     .feedback-btn {
-      margin-top: 25px;
+      margin-top: 20px;
       padding: 10px 25px;
-      background-color: #28a745;
       color: white;
       border: none;
       border-radius: 5px;
       cursor: pointer;
     }
 
-    .feedback-btn:hover {
+    .feedback-btn.green {
+      background-color: #28a745;
+    }
+
+    .feedback-btn.green:hover {
       background-color: #218838;
+    }
+
+    .feedback-btn.blue {
+      background-color: #007bff;
+    }
+
+    .feedback-btn.blue:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
@@ -102,10 +113,16 @@
       </tbody>
     </table>
 
-    <!-- Feedback Button -->
+    <!-- Give Feedback Button -->
     <form method="get" action="/feedback">
       <input type="hidden" name="student_id" value="{{ student_id }}">
-      <button type="submit" class="feedback-btn">Give Feedback</button>
+      <button type="submit" class="feedback-btn green">Give Feedback</button>
+    </form>
+
+    <!-- View Feedback Button -->
+    <form method="get" action="/feedback/view">
+      <input type="hidden" name="student_id" value="{{ student_id }}">
+      <button type="submit" class="feedback-btn blue">View Feedback</button>
     </form>
   </div>
 </body>
