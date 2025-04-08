@@ -27,19 +27,7 @@ app.include_router(feedback_routes.router, prefix="/feedback")
 def read_root(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
-
-# ✅ Optional JWT token (if your friend's API is secured)
-# USERNAME = os.getenv("API_USERNAME", "admin1")
-# PASSWORD = os.getenv("API_PASSWORD", "123456")
-# TOKEN_URL = "http://scp-exam-app-env.eba-3hfvxmq4.us-east-1.elasticbeanstalk.com/api/token/"
-
-# async def get_token():
-#     async with httpx.AsyncClient() as client:
-#         response = await client.post(TOKEN_URL, json={"username": USERNAME, "password": PASSWORD})
-#         response.raise_for_status()
-#         return response.json().get("access")
-
-# ✅ External results fetch
+# External results fetch
 @app.get("/external-results/{student_id}", response_class=HTMLResponse)
 async def get_external_results(student_id: str, request: Request):
     api_url = f"http://scp-exam-app-env.eba-3hfvxmq4.us-east-1.elasticbeanstalk.com/api/results/{student_id}/"
