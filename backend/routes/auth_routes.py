@@ -31,5 +31,5 @@ def login_user(
     if password != student.password:
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
-    # ✅ Successful login — redirect to results page
+    # Successful login — redirect to results page
     return RedirectResponse(url=f"/results?student_id={student_id}", status_code=303)
