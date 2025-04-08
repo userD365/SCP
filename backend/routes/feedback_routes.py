@@ -8,7 +8,7 @@ from backend import models
 router = APIRouter()
 templates = Jinja2Templates(directory="frontend")
 
-# ✅ GET: Show feedback form
+# GET: Show feedback form
 @router.get("/", response_class=HTMLResponse)
 def show_feedback_form(request: Request, student_id: str = ""):
     return templates.TemplateResponse("feedback.html", {
@@ -16,7 +16,7 @@ def show_feedback_form(request: Request, student_id: str = ""):
         "student_id": student_id
     })
 
-# ✅ POST: Submit new feedback
+# POST: Submit new feedback
 @router.post("/")
 def submit_feedback(
     student_id: str = Form(...),
@@ -28,7 +28,7 @@ def submit_feedback(
     db.commit()
     return RedirectResponse(url=f"/feedback/view?student_id={student_id}", status_code=303)
 
-# ✅ GET: View feedbacks for a student (HTML view)
+# GET: View feedbacks for a student (HTML view)
 @router.get("/view", response_class=HTMLResponse)
 def view_feedbacks(request: Request, student_id: str, db: Session = Depends(get_db)):
     feedbacks = db.query(models.Feedback).filter(models.Feedback.student_id == student_id).all()
@@ -38,7 +38,7 @@ def view_feedbacks(request: Request, student_id: str, db: Session = Depends(get_
         "feedbacks": feedbacks
     })
 
-# ✅ GET: View feedbacks for a student (JSON API)
+# GET: View feedbacks for a student (JSON API)
 @router.get("/api/view", response_class=JSONResponse)
 def view_feedbacks_api(student_id: str, db: Session = Depends(get_db)):
     feedbacks = db.query(models.Feedback).filter(models.Feedback.student_id == student_id).all()
@@ -55,7 +55,7 @@ def view_feedbacks_api(student_id: str, db: Session = Depends(get_db)):
     ]
     return JSONResponse(content=result)
 
-# ✅ GET: All feedbacks for external app (no filter)
+# GET: All feedbacks for external app (no filter)
 @router.get("/api/feedbacks", response_class=JSONResponse)
 def external_feedbacks(db: Session = Depends(get_db)):
     feedbacks = db.query(models.Feedback).all()
@@ -69,7 +69,7 @@ def external_feedbacks(db: Session = Depends(get_db)):
     ]
     return JSONResponse(content=result)
 
-# ✅ GET: Edit feedback form
+# GET: Edit feedback form
 @router.get("/edit/{feedback_id}", response_class=HTMLResponse)
 def edit_feedback_form(request: Request, feedback_id: int, db: Session = Depends(get_db)):
     feedback = db.query(models.Feedback).filter(models.Feedback.id == feedback_id).first()
@@ -80,7 +80,7 @@ def edit_feedback_form(request: Request, feedback_id: int, db: Session = Depends
         "feedback": feedback
     })
 
-# ✅ POST: Update feedback
+# POST: Update feedback
 @router.post("/edit/{feedback_id}")
 def update_feedback(
     feedback_id: int,
@@ -96,7 +96,7 @@ def update_feedback(
     db.commit()
     return RedirectResponse(url=f"/feedback/view?student_id={student_id}", status_code=303)
 
-# ✅ GET: Delete feedback
+# GET: Delete feedback
 @router.get("/delete/{feedback_id}")
 def delete_feedback(feedback_id: int, db: Session = Depends(get_db)):
     feedback = db.query(models.Feedback).filter(models.Feedback.id == feedback_id).first()
@@ -108,7 +108,7 @@ def delete_feedback(feedback_id: int, db: Session = Depends(get_db)):
     db.commit()
     return RedirectResponse(url=f"/feedback/view?student_id={student_id}", status_code=303)
 
-# ✅ GET: View all feedbacks (for external use)
+# GET: View all feedbacks (for external use)
 @router.get("/api/view_all", response_class=JSONResponse)
 def view_all_feedbacks(db: Session = Depends(get_db)):
     feedbacks = db.query(models.Feedback).all()
