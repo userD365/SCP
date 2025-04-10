@@ -85,15 +85,12 @@
 </head>
 <body>
   <div class="container">
-    <!-- Logout Button -->
     <form method="get" action="/auth/login">
       <button type="submit" class="logout-btn">Logout</button>
     </form>
 
-    <!-- Welcome Text -->
     <h2>Results for {{ student_name }} (ID: {{ student_id }})</h2>
 
-    <!-- Results Table -->
     <table>
       <thead>
         <tr>
@@ -113,13 +110,11 @@
       </tbody>
     </table>
 
-    <!-- Give Feedback Button -->
     <form method="get" action="/feedback">
       <input type="hidden" name="student_id" value="{{ student_id }}">
       <button type="submit" class="feedback-btn green">Give Feedback</button>
     </form>
 
-    <!-- View Feedback Button -->
     <form method="get" action="/feedback/view">
       <input type="hidden" name="student_id" value="{{ student_id }}">
       <button type="submit" class="feedback-btn blue">View Feedback</button>
