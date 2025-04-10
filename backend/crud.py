@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from backend import models, schemas
 
-# Function to create/register a new student (optional if you skip registration)
+# Function to create
 def create_student(db: Session, student: schemas.StudentCreate):
     db_student = models.Student(**student.dict())
     db.add(db_student)
